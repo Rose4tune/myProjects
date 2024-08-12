@@ -1,13 +1,15 @@
+const cnt = 8;
+
 document.addEventListener("DOMContentLoaded", function () {
   const chessboard = document.getElementById("chessboard");
   const boardFrag = document.createDocumentFragment();
 
-  for (let i = 0; i < 64; i++) {
+  for (let i = 0; i < Math.pow(cnt, 2); i++) {
     const square = document.createElement("div");
     square.className = "square";
 
-    const row = Math.floor(i / 8);
-    const col = i % 8;
+    const row = Math.floor(i / cnt);
+    const col = i % cnt;
 
     if ((row + col) % 2 == 0) {
       square.classList.add("white");
@@ -15,12 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
       square.classList.add("black");
     }
 
-    const rank = 8 - Math.floor(i / 8);
-    const file = String.fromCharCode(97 + (i % 8));
+    const rank = cnt - Math.floor(i / cnt);
+    const file = String.fromCharCode(97 + (i % cnt));
 
     square.setAttribute("name", `${file}${rank}`);
     boardFrag.appendChild(square);
   }
-
   chessboard.appendChild(boardFrag);
 });
