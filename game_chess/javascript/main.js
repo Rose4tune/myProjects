@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const chessboard = document.getElementById("chessboard");
+  const boardFrag = document.createDocumentFragment();
 
   for (let i = 0; i < 64; i++) {
     const square = document.createElement("div");
@@ -13,6 +14,13 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
       square.classList.add("black");
     }
-    chessboard.appendChild(square);
+
+    const rank = 8 - Math.floor(i / 8);
+    const file = String.fromCharCode(97 + (i % 8));
+
+    square.setAttribute("name", `${file}${rank}`);
+    boardFrag.appendChild(square);
   }
+
+  chessboard.appendChild(boardFrag);
 });
