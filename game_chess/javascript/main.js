@@ -28,8 +28,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const piece = initialBoardSetup[i];
     if (piece) {
       const img = document.createElement("img");
-      img.src = `/game_chess/javascript/images/${row < 2 ? 'white' : 'black'}_${piece}.svg`;
+      const color = row < 2 ? 'white' : 'black';
+      img.src = `/game_chess/javascript/images/${color}_${piece}.svg`;
       img.alt = piece;
+      img.setAttribute("color", color);
       square.appendChild(img);
     }
 
@@ -38,3 +40,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chessboard.appendChild(boardFrag);
 });
+
+
+let selectedPiece = null;
+let selectedSquare = null;
+
+
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains('square')) return
+
+  const targetSquare = e.target;
+
+  const removeSelected = () => {
+    selectedSquare.classList.remove("selected");
+    selectedPiece = null;
+    selectedSquare = null;
+  };
+
+  if (!selectedPiece && targetSquare.firstChild) {
+    selectedPiece = e.target.firstChild;
+    selectedSquare = e.target;
+    selectedSquare.classList.add("selected");
+  }
+
+  if (selectedPiece) {
+    if (targetSquare !== selectedSquare) {
+      if (!targetSquare.hasChildNodes()) {
+        targetSquare.appendChild(selectedPiece)
+        removeSelected();
+
+      } else {
+        const selectedColor = selectedPiece.getAttribute("color");
+        const targetColor = targetSquare.firstChild.getAttribute("color");
+
+        if (selectedColor !== targetColor) {
+          targetSquare.firstChild.remove();
+          targetSquare.appendChild(selectedPiece)
+          removeSelected();
+        }
+      }
+    }
+  }
+})

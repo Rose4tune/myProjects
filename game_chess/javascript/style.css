@@ -20,6 +20,7 @@ main {
 }
 
 .square {
+  position: relative;
   width: var(--board-space);
   height: var(--board-space);
   display: flex;
@@ -33,4 +34,16 @@ main {
 
 .square.white {
   background-color: #eeeed2;
+}
+
+.square::before {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: '';
+  display: block;
+}
+
+.square.selected {
+  background-color: yellow;
 }
