@@ -22,6 +22,9 @@ main {
 .square {
   width: var(--board-space);
   height: var(--board-space);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .square.black {
