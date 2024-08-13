@@ -19,6 +19,13 @@ main {
   border: 2px solid #333;
 }
 
+.symbol {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 1rem;
+}
+
 .square {
   position: relative;
   width: var(--board-space);

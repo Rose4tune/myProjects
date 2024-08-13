@@ -23,15 +23,22 @@ document.addEventListener("DOMContentLoaded", function () {
     selectedPiece = null;
     selectedSquare = null;
   };
+
   for (let i = 0; i < Math.pow(cnt, 2); i++) {
     const row = Math.floor(i / cnt);
     const col = i % cnt;
     const rank = cnt - Math.floor(i / cnt); // 행 숫자
     const file = String.fromCharCode(97 + (i % cnt)); // 열 알파벳
+    const symbol = `${file}${rank}`;
     
     const square = document.createElement("div");
     square.className = `square ${(row + col) % 2 == 0 ? "white" : "black"}`;
-    square.setAttribute("name", `${file}${rank}`);
+    square.setAttribute("name", symbol);
+
+    const span = document.createElement("span");
+    span.className = "symbol";
+    span.innerHTML = symbol;
+    square.appendChild(span);
 
     const piece = initialBoardSetup[i];
     if (piece) {
