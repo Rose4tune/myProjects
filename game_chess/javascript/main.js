@@ -18,12 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedPiece = null;
   let selectedSquare = null;
 
-  const removeSelected = () => {
-    selectedSquare.classList.remove("selected");
-    selectedPiece = null;
-    selectedSquare = null;
-  };
-
   for (let i = 0; i < Math.pow(cnt, 2); i++) {
     const row = Math.floor(i / cnt);
     const col = i % cnt;
@@ -49,6 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
       img.setAttribute("color", color);
       square.appendChild(img);
     }
+
+    const removeSelected = () => {
+      selectedSquare.classList.remove("selected");
+      selectedPiece = null;
+      selectedSquare = null;
+    };
 
     square.addEventListener("click", function () {
       if (selectedPiece) {
