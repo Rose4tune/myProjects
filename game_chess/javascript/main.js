@@ -54,6 +54,16 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!targetSquare.hasChildNodes()) {
             targetSquare.appendChild(selectedPiece);
             removeSelected();
+
+          } else {
+            const selectedColor = selectedPiece.getAttribute("color");
+            const targetColor = targetSquare.firstChild.getAttribute("color");
+
+            if (selectedColor !== targetColor) {
+              targetSquare.firstChild.remove();
+              targetSquare.appendChild(selectedPiece);
+              removeSelected();
+            }
           }
         }
         
