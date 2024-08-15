@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const span = document.createElement("span");
     span.className = "symbol";
     span.innerHTML = symbol;
-    square.appendChild(span);
+    // square.appendChild(span);
 
     const piece = initialBoardSetup[i];
     if (piece) {
