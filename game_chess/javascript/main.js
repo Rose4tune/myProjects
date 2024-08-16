@@ -59,12 +59,27 @@ document.addEventListener("DOMContentLoaded", function () {
           const targetSquare = square;
 
           if (!targetSquare.hasChildNodes()) {
+            console.log(selectedSquare, targetSquare, row, col);
+            console.log(
+              new Pawn(
+                "white",
+                selectedSquare.getAttribute("name")
+              ).isValidMove(targetSquare.getAttribute("name"))
+            );
             targetSquare.appendChild(selectedPiece);
             removeSelected();
 
           } else {
             const selectedColor = selectedPiece.getAttribute("color");
             const targetColor = targetSquare.firstChild.getAttribute("color");
+            
+            console.log(selectedSquare, targetSquare, row, col)
+            console.log(
+              new Pawn(
+                "white",
+                selectedSquare.getAttribute("name")
+              ).isValidMove(targetSquare.getAttribute("name"))
+            );
 
             if (selectedColor !== targetColor) {
               targetSquare.firstChild.remove();
