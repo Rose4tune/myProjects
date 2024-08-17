@@ -21,28 +21,42 @@ document.addEventListener("DOMContentLoaded", function () {
   for (let i = 0; i < Math.pow(cnt, 2); i++) {
     const row = Math.floor(i / cnt);
     const col = i % cnt;
-    const rank = cnt - Math.floor(i / cnt); // 행 숫자
-    const file = String.fromCharCode(97 + (i % cnt)); // 열 알파벳
-    const symbol = `${file}${rank}`;
-    
+    const rank = cnt - row; // 행 숫자
+    const file = String.fromCharCode(97 + col); // 열 알파벳
+    const color = row < 2 ? "black" : "white";
+    const symbol = `${file}${col} / ${rank}${row}`;
+
     const square = document.createElement("div");
     square.className = `square ${(row + col) % 2 == 0 ? "white" : "black"}`;
-    square.setAttribute("name", symbol);
+    square.dataset.row = row;
+    square.dataset.col = col;
+
+    const pieceType = initialBoardSetup[i];
+    let piece = null;
+
+    if (pieceType) {
+      switch (pieceType) {
+        case "king": piece = new King(color, row, col); break;
+        case "queen": piece = new Queen(color, row, col); break;
+        case "rook": piece = new Rook(color, row, col); break;
+        case "bishop": piece = new Bishop(color, row, col); break;
+        case "knight": piece = new Knight(color, row, col); break;
+        case "pawn": piece = new Pawn(color, row, col); break;
+      }
+      if (piece) {
+        const img = document.createElement("img");
+        img.src = `/game_chess/javascript/images/${color}_${pieceType}.svg`;
+        img.alt = pieceType;
+        img.setAttribute("color", color);
+        square.appendChild(img);
+        square.piece = piece;
+      }
+    }
 
     const span = document.createElement("span");
     span.className = "symbol";
     span.innerHTML = symbol;
-    // square.appendChild(span);
-
-    const piece = initialBoardSetup[i];
-    if (piece) {
-      const img = document.createElement("img");
-      const color = row > 2 ? "white" : "black";
-      img.src = `/game_chess/javascript/images/${color}_${piece}.svg`;
-      img.alt = piece;
-      img.setAttribute("color", color);
-      square.appendChild(img);
-    }
+    square.appendChild(span);
 
     const removeSelected = () => {
       selectedSquare.classList.remove("selected");
@@ -57,43 +71,54 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } else {
           const targetSquare = square;
+          const targetRow = parseInt(square.dataset.row);
+          const targetCol = parseInt(square.dataset.col);
 
-          if (!targetSquare.hasChildNodes()) {
-            console.log(selectedSquare, targetSquare, row, col);
-            console.log(
-              new Pawn(
-                "white",
-                selectedSquare.getAttribute("name")
-              ).isValidMove(targetSquare.getAttribute("name"))
-            );
-            targetSquare.appendChild(selectedPiece);
+          const isValidMove = selectedPiece.isValidMove({ row: targetRow, col: targetCol }, null);
+
+          if (!targetSquare.piece && isValidMove) {
+            targetSquare.prepend(selectedSquare.firstChild);
+            targetSquare.piece = selectedPiece;
+            targetSquare.piece.row = targetRow;
+            targetSquare.piece.col = targetCol;
+            selectedSquare.piece = null;
+
             removeSelected();
-
-          } else {
-            const selectedColor = selectedPiece.getAttribute("color");
-            const targetColor = targetSquare.firstChild.getAttribute("color");
-            
-            console.log(selectedSquare, targetSquare, row, col)
-            console.log(
-              new Pawn(
-                "white",
-                selectedSquare.getAttribute("name")
-              ).isValidMove(targetSquare.getAttribute("name"))
-            );
-
-            if (selectedColor !== targetColor) {
-              targetSquare.firstChild.remove();
-              targetSquare.appendChild(selectedPiece);
-              removeSelected();
-            }
           }
         }
-        
-      } else if (square.hasChildNodes()) {
-        selectedPiece = square.firstChild;
+      } else if (square.piece) {
+        selectedPiece = square.piece;
         selectedSquare = square;
         selectedSquare.classList.add("selected");
       }
+      // if (selectedPiece) {
+      //   if (selectedSquare === square) {
+      //     removeSelected();
+
+      //   } else {
+      //     const targetSquare = square;
+      //     const isValidMove = movePiece({ targetSquare, selectedSquare });
+
+      //     if (!targetSquare.hasChildNodes() && isValidMove) {
+      //       targetSquare.appendChild(selectedPiece);
+      //       removeSelected();
+      //     } else {
+      //       const selectedColor = selectedPiece.getAttribute("color");
+      //       const targetColor = targetSquare.firstChild.getAttribute("color");
+
+      //       if (selectedColor !== targetColor && isValidMove) {
+      //         targetSquare.firstChild.remove();
+      //         targetSquare.appendChild(selectedPiece);
+      //         removeSelected();
+      //       }
+      //     }
+      //   }
+      // } else if (square.hasChildNodes()) {
+      //   selectedPiece = square.firstChild;
+      //   selectedSquare = square;
+      //   selectedSquare.classList.add("selected");
+      // }
+        
     });
 
     boardFrag.appendChild(square);
@@ -101,3 +126,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chessboard.appendChild(boardFrag);
 });
+
+
+const movePiece = ({targetSquare, selectedSquare}) => {
+  const targetName = targetSquare.getAttribute("name");
+  const selectedName = selectedSquare.getAttribute("name");
+
+  return new Pawn("white", selectedName).isValidMove(targetName);
+};

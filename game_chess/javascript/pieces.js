@@ -1,8 +1,8 @@
 class Piece {
-  constructor(color, position) {
+  constructor(color, row, col) {
     this.color = color;
-    this.row = position[0];
-    this.col = position[1];
+    this.row = row;
+    this.col = col;
   }
 
   isValidMove(targetPosition, board) {
@@ -10,32 +10,61 @@ class Piece {
   }
 }
 
+class King extends Piece {
+  isValidMove(targetPosition, board) {
+    return true;
+  }
+}
+
+class Queen extends Piece {
+  isValidMove(targetPosition, board) {
+    return true;
+  }
+}
+
+class Rook extends Piece {
+  isValidMove(targetPosition, board) {
+    return true;
+  }
+}
+
+class Bishop extends Piece {
+  isValidMove(targetPosition, board) {
+    return true
+  }
+}
+
+class Knight extends Piece {
+  isValidMove(targetPosition, board) {
+    return true;
+  }
+}
+
 class Pawn extends Piece {
   isValidMove(targetPosition, board) {
     const direction = this.color === "white" ? -1 : 1; // 백은 위로, 흑은 아래로
     const startRow = this.color === "white" ? 6 : 1;
-
+    const targetRow = targetPosition.row;
+    const targetCol = targetPosition.col;
+    
     // 처음 두 칸 이동 가능
     if (
       this.row === startRow &&
-      targetPosition[0] === this.row + 2 * direction &&
-      targetPosition[1] === this.col
+      targetRow === this.row + (2 * direction) &&
+      targetCol === this.col
     ) {
       return true;
     }
 
     // 한 칸 전진
-    if (
-      targetPosition[0] === this.row + direction &&
-      targetPosition[1] === this.col
-    ) {
+    if (targetRow === this.row + direction && targetCol === this.col) {
       return true;
     }
 
     // 대각선 공격
     if (
-      targetPosition[0] === this.row + direction &&
-      Math.abs(targetPosition[1] - this.col) === 1
+      targetCol === this.row + direction &&
+      Math.abs(targetRow - this.col) === 1
     ) {
       return true;
     }
