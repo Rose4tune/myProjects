@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const targetRow = parseInt(square.dataset.row);
           const targetCol = parseInt(square.dataset.col);
 
-          const isValidMove = selectedPiece.isValidMove({ row: targetRow, col: targetCol }, null);
+          const isValidMove = selectedPiece.isValidMove(targetRow, targetCol);
 
           if (!targetSquare.piece && isValidMove) {
             targetSquare.prepend(selectedSquare.firstChild);
@@ -84,6 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
             selectedSquare.piece = null;
 
             removeSelected();
+          } else {
+            removeSelected();
           }
         }
       } else if (square.piece) {
@@ -91,34 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedSquare = square;
         selectedSquare.classList.add("selected");
       }
-      // if (selectedPiece) {
-      //   if (selectedSquare === square) {
-      //     removeSelected();
-
-      //   } else {
-      //     const targetSquare = square;
-      //     const isValidMove = movePiece({ targetSquare, selectedSquare });
-
-      //     if (!targetSquare.hasChildNodes() && isValidMove) {
-      //       targetSquare.appendChild(selectedPiece);
-      //       removeSelected();
-      //     } else {
-      //       const selectedColor = selectedPiece.getAttribute("color");
-      //       const targetColor = targetSquare.firstChild.getAttribute("color");
-
-      //       if (selectedColor !== targetColor && isValidMove) {
-      //         targetSquare.firstChild.remove();
-      //         targetSquare.appendChild(selectedPiece);
-      //         removeSelected();
-      //       }
-      //     }
-      //   }
-      // } else if (square.hasChildNodes()) {
-      //   selectedPiece = square.firstChild;
-      //   selectedSquare = square;
-      //   selectedSquare.classList.add("selected");
-      // }
-        
     });
 
     boardFrag.appendChild(square);

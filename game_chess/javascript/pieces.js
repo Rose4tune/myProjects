@@ -5,47 +5,47 @@ class Piece {
     this.col = col;
   }
 
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     throw new Error("This method should be implemented by subclasses");
   }
 }
 
 class King extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     return true;
   }
 }
 
 class Queen extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     return true;
   }
 }
 
 class Rook extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     return true;
   }
 }
 
 class Bishop extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     return true
   }
 }
 
 class Knight extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     return true;
   }
 }
 
 class Pawn extends Piece {
-  isValidMove(targetPosition, board) {
+  isValidMove(row, col) {
     const direction = this.color === "white" ? -1 : 1; // 백은 위로, 흑은 아래로
     const startRow = this.color === "white" ? 6 : 1;
-    const targetRow = targetPosition.row;
-    const targetCol = targetPosition.col;
+    const targetRow = row;
+    const targetCol = col;
     
     // 처음 두 칸 이동 가능
     if (
