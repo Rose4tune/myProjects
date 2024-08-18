@@ -27,21 +27,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const symbol = `${file}${col} / ${rank}${row}`;
 
     const square = document.createElement("div");
-    square.className = `square ${(row + col) % 2 == 0 ? "white" : "black"}`;
-    square.dataset.row = row;
+    square.className = `square ${(col + row) % 2 == 0 ? "white" : "black"}`;
     square.dataset.col = col;
+    square.dataset.row = row;
 
     const pieceType = initialBoardSetup[i];
     let piece = null;
 
     if (pieceType) {
       switch (pieceType) {
-        case "king": piece = new King(color, row, col); break;
-        case "queen": piece = new Queen(color, row, col); break;
-        case "rook": piece = new Rook(color, row, col); break;
-        case "bishop": piece = new Bishop(color, row, col); break;
-        case "knight": piece = new Knight(color, row, col); break;
-        case "pawn": piece = new Pawn(color, row, col); break;
+        case "king": piece = new King(color, col, row); break;
+        case "queen": piece = new Queen(color, col, row); break;
+        case "rook": piece = new Rook(color, col, row); break;
+        case "bishop": piece = new Bishop(color, col, row); break;
+        case "knight": piece = new Knight(color, col, row); break;
+        case "pawn": piece = new Pawn(color, col, row); break;
       }
       if (piece) {
         const img = document.createElement("img");
@@ -64,6 +64,14 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedSquare = null;
     };
 
+    const movePiece = (targetSquare, targetCol, targetRow) => {
+      targetSquare.prepend(selectedSquare.firstChild);
+      targetSquare.piece = selectedPiece;
+      targetSquare.piece.col = targetCol;
+      targetSquare.piece.row = targetRow;
+      selectedSquare.piece = null;
+    };
+
     square.addEventListener("click", function () {
       if (selectedPiece) {
         if (selectedSquare === square) {
@@ -71,23 +79,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         } else {
           const targetSquare = square;
-          const targetRow = parseInt(square.dataset.row);
+          const targetPiece = targetSquare.piece;
           const targetCol = parseInt(square.dataset.col);
+          const targetRow = parseInt(square.dataset.row);
+          const isAttack = targetPiece?.color !== selectedPiece.color ? true : false;
+          const isValidMove = selectedPiece.isValidMove(targetCol, targetRow, targetPiece, isAttack);
 
-          const isValidMove = selectedPiece.isValidMove(targetRow, targetCol);
-
-          if (!targetSquare.piece && isValidMove) {
-            targetSquare.prepend(selectedSquare.firstChild);
-            targetSquare.piece = selectedPiece;
-            targetSquare.piece.row = targetRow;
-            targetSquare.piece.col = targetCol;
-            selectedSquare.piece = null;
-
-            removeSelected();
-          } else {
+          if (isValidMove) {
+            if (isAttack) targetSquare.firstChild.remove();
+            movePiece(targetSquare, targetCol, targetRow);
             removeSelected();
           }
         }
+        
       } else if (square.piece) {
         selectedPiece = square.piece;
         selectedSquare = square;
