@@ -5,43 +5,54 @@ class Piece {
     this.row = row;
   }
 
-  isValidMove(row, col) {
+  isValidMove(targetCol, targetRow) {
     throw new Error("This method should be implemented by subclasses");
   }
 }
 
 class King extends Piece {
-  isValidMove(row, col) {
-    return true;
+  isValidMove(targetCol, targetRow) {
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
+
+    return colDiff <= 1 && rowDiff <= 1;
   }
 }
 
 class Queen extends Piece {
-  isValidMove(row, col) {
-    return true;
+  isValidMove(targetCol, targetRow) {
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
+    return rowDiff === colDiff || rowDiff === 0 || colDiff === 0;
   }
 }
 
 class Rook extends Piece {
-  isValidMove(row, col) {
-    return true;
+  isValidMove(targetCol, targetRow) {
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
+    return rowDiff === 0 || colDiff === 0;
   }
 }
 
 class Bishop extends Piece {
-  isValidMove(row, col) {
-    return true
+  isValidMove(targetCol, targetRow) {
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
+    return rowDiff === colDiff;
   }
 }
 
 class Knight extends Piece {
-  isValidMove(row, col) {
-    return true;
+  isValidMove(targetCol, targetRow) {
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
+    return (rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2);
   }
 }
 
 class Pawn extends Piece {
-  isValidMove(targetCol, targetRow, isPiece, isAttack) {
+  isValidMove(targetCol, targetRow, isPiece, isSameColor) {
     const direction = this.color === "white" ? -1 : 1; // 백은 위로, 흑은 아래로
     const startRow = this.color === "white" ? 6 : 1;
 
@@ -67,7 +78,7 @@ class Pawn extends Piece {
     if (
       targetRow === this.row + direction &&
       Math.abs(targetCol - this.col) === 1 &&
-      isAttack
+      !isSameColor
     ) {
       return true;
     }

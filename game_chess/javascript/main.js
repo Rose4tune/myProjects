@@ -82,11 +82,14 @@ document.addEventListener("DOMContentLoaded", function () {
           const targetPiece = targetSquare.piece;
           const targetCol = parseInt(square.dataset.col);
           const targetRow = parseInt(square.dataset.row);
-          const isAttack = targetPiece?.color !== selectedPiece.color ? true : false;
-          const isValidMove = selectedPiece.isValidMove(targetCol, targetRow, targetPiece, isAttack);
+          const isSameColor = targetPiece && targetSquare.piece.color === selectedPiece.color;
+          const isValidMove = selectedPiece.isValidMove(targetCol, targetRow, targetPiece, isSameColor);
 
           if (isValidMove) {
-            if (isAttack) targetSquare.firstChild.remove();
+            if (targetPiece) {
+              if (isSameColor) return;
+              else targetSquare.firstChild.remove();
+            }
             movePiece(targetSquare, targetCol, targetRow);
             removeSelected();
           }
