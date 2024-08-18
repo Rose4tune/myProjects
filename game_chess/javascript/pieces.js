@@ -86,3 +86,5 @@ class Pawn extends Piece {
     return false;
   }
 }
+
+export { King, Queen, Rook, Knight, Bishop, Pawn }

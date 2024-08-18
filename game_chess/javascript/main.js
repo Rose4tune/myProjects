@@ -1,3 +1,5 @@
+import { King, Queen, Rook, Knight, Bishop, Pawn } from './pieces.js'
+
 const cnt = 8;
 
 document.addEventListener("DOMContentLoaded", function () {
