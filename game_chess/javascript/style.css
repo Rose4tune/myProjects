@@ -56,3 +56,7 @@ main {
 .square.selected {
   background-color: yellow;
 }
+
+.square.highlight {
+  background-color: orange;
+}

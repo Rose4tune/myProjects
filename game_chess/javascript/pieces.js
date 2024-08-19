@@ -8,6 +8,26 @@ class Piece {
   isValidMove(targetCol, targetRow) {
     throw new Error("This method should be implemented by subclasses");
   }
+  
+  getValidMoves(board) {
+    const validMoves = [];
+
+    for (let col = 0; col < 8; col++) {
+      for (let row = 0; row < 8; row++) {
+        const targetPiece = board[row][col]
+        const isSameColor = targetPiece && targetPiece.color === this.color;
+
+        if (
+          this.isValidMove(col, row, targetPiece, isSameColor) &&
+          !isSameColor
+        ) {
+          validMoves.push({ col, row });
+        }
+      }
+    }
+
+    return validMoves;
+  }
 }
 
 class King extends Piece {
@@ -15,7 +35,7 @@ class King extends Piece {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
 
-    return colDiff <= 1 && rowDiff <= 1;
+    return colDiff <= 1 && rowDiff <= 1 && !(colDiff == 0 && rowDiff == 0);
   }
 }
 
@@ -56,33 +76,33 @@ class Pawn extends Piece {
     const direction = this.color === "white" ? -1 : 1; // 백은 위로, 흑은 아래로
     const startRow = this.color === "white" ? 6 : 1;
 
-    // 처음 두 칸 이동 가능
-    if (
-      this.row === startRow &&
-      targetRow === this.row + 2 * direction &&
-      targetCol === this.col
-    ) {
-      return true;
-    }
-
-    // 한 칸 전진
-    if (
-      targetCol === this.col &&
-      targetRow === this.row + direction &&
-      !isPiece
-    ) {
-      return true;
-    }
-
-    // 대각선 공격
-    if (
-      targetRow === this.row + direction &&
-      Math.abs(targetCol - this.col) === 1 &&
-      !isSameColor
-    ) {
-      return true;
-    }
-
+      // 처음 두 칸 이동 가능
+      if (
+        this.row === startRow &&
+        targetRow === this.row + 2 * direction &&
+        targetCol === this.col
+      ) {
+        return true;
+      }
+  
+      // 한 칸 전진
+      if (
+        targetCol === this.col &&
+        targetRow === this.row + direction
+        && !isPiece
+      ) {
+        return true;
+      }
+      
+      // 대각선 공격
+      if (
+        targetRow === this.row + direction &&
+        Math.abs(targetCol - this.col) === 1
+        && isPiece && !isSameColor
+      ) {
+        return true;
+      }
+      
     return false;
   }
 }

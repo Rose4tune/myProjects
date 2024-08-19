@@ -1,6 +1,7 @@
 import { King, Queen, Rook, Knight, Bishop, Pawn } from './pieces.js'
 
 const cnt = 8;
+const highlightSquares = [];
 
 document.addEventListener("DOMContentLoaded", function () {
   const chessboard = document.getElementById("chessboard");
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let selectedPiece = null;
   let selectedSquare = null;
+  const board = Array.from(Array(8), () => Array(8).fill(null));
 
   for (let i = 0; i < Math.pow(cnt, 2); i++) {
     const row = Math.floor(i / cnt);
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
         img.setAttribute("color", color);
         square.appendChild(img);
         square.piece = piece;
+        board[row][col] = piece;
       }
     }
 
@@ -64,6 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
       selectedSquare.classList.remove("selected");
       selectedPiece = null;
       selectedSquare = null;
+      clearHightlightMoves();
     };
 
     const movePiece = (targetSquare, targetCol, targetRow) => {
@@ -73,6 +77,24 @@ document.addEventListener("DOMContentLoaded", function () {
       targetSquare.piece.row = targetRow;
       selectedSquare.piece = null;
     };
+
+    const clearHightlightMoves = () => {
+      highlightSquares.forEach((square) => {
+        square.classList.remove("highlight");
+      });
+    };
+
+    const highlightValidMoves = (moves) => {
+      moves.forEach((move) => {
+        const targetSquare = document.querySelector(
+          `.square[data-col='${move.col}'][data-row='${move.row}`
+        );
+        if (targetSquare) {
+          targetSquare.classList.add('highlight');
+          highlightSquares.push(targetSquare)
+        }
+      })
+    }
 
     square.addEventListener("click", function () {
       if (selectedPiece) {
@@ -101,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         selectedPiece = square.piece;
         selectedSquare = square;
         selectedSquare.classList.add("selected");
+        highlightValidMoves(selectedPiece.getValidMoves(board));
       }
     });
 
@@ -109,11 +132,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
   chessboard.appendChild(boardFrag);
 });
-
-
-const movePiece = ({targetSquare, selectedSquare}) => {
-  const targetName = targetSquare.getAttribute("name");
-  const selectedName = selectedSquare.getAttribute("name");
-
-  return new Pawn("white", selectedName).isValidMove(targetName);
-};
