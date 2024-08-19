@@ -80,7 +80,8 @@ class Pawn extends Piece {
       if (
         this.row === startRow &&
         targetRow === this.row + 2 * direction &&
-        targetCol === this.col
+        targetCol === this.col &&
+        !isPiece
       ) {
         return true;
       }

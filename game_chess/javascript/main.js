@@ -73,15 +73,20 @@ document.addEventListener("DOMContentLoaded", function () {
     const movePiece = (targetSquare, targetCol, targetRow) => {
       targetSquare.prepend(selectedSquare.firstChild);
       targetSquare.piece = selectedPiece;
-      targetSquare.piece.col = targetCol;
-      targetSquare.piece.row = targetRow;
       selectedSquare.piece = null;
+
+      board[selectedPiece.row][selectedPiece.col] = null;
+      board[targetRow][targetCol] = selectedPiece;
+
+      selectedPiece.col = targetCol;
+      selectedPiece.row = targetRow;
     };
 
     const clearHightlightMoves = () => {
       highlightSquares.forEach((square) => {
         square.classList.remove("highlight");
       });
+      highlightSquares.length = 0;
     };
 
     const highlightValidMoves = (moves) => {
