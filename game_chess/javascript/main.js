@@ -73,13 +73,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const movePiece = (targetSquare, targetCol, targetRow) => {
       targetSquare.prepend(selectedSquare.firstChild);
       targetSquare.piece = selectedPiece;
+      targetSquare.col = targetCol;
+      targetSquare.row = targetRow;
       selectedSquare.piece = null;
 
       board[selectedPiece.row][selectedPiece.col] = null;
       board[targetRow][targetCol] = selectedPiece;
-
-      selectedPiece.col = targetCol;
-      selectedPiece.row = targetRow;
     };
 
     const clearHightlightMoves = () => {
@@ -92,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const highlightValidMoves = (moves) => {
       moves.forEach((move) => {
         const targetSquare = document.querySelector(
-          `.square[data-col='${move.col}'][data-row='${move.row}`
+          `.square[data-col='${move.col}'][data-row='${move.row}']`
         );
         if (targetSquare) {
           targetSquare.classList.add('highlight');
@@ -112,7 +111,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const targetCol = parseInt(square.dataset.col);
           const targetRow = parseInt(square.dataset.row);
           const isSameColor = targetPiece && targetSquare.piece.color === selectedPiece.color;
-          const isValidMove = selectedPiece.isValidMove(targetCol, targetRow, targetPiece, isSameColor);
+          const isValidMove = selectedPiece.isValidMove({targetCol, targetRow, targetPiece, isSameColor, board});
 
           if (isValidMove) {
             if (targetPiece) {
