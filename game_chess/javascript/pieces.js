@@ -18,7 +18,7 @@ class Piece {
         const isSameColor = targetPiece && targetPiece.color === this.color;
 
         if (
-          this.isValidMove({targetCol:col, targetRow:row, targetPiece, isSameColor}) &&
+          this.isValidMove(col, row, board) &&
           !isSameColor
         ) {
           validMoves.push({ col, row });
@@ -31,7 +31,7 @@ class Piece {
 }
 
 class King extends Piece {
-  isValidMove({ targetCol, targetRow }) {
+  isValidMove(targetCol, targetRow) {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
 
@@ -40,7 +40,7 @@ class King extends Piece {
 }
 
 class Queen extends Piece {
-  isValidMove({ targetCol, targetRow }) {
+  isValidMove(targetCol, targetRow) {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
 
@@ -49,16 +49,16 @@ class Queen extends Piece {
 }
 
 class Rook extends Piece {
-  isValidMove({ targetCol, targetRow, board }) {
+  isValidMove(targetCol, targetRow, board) {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
-
+    
     return rowDiff === 0 || colDiff === 0;
   }
 }
 
 class Bishop extends Piece {
-  isValidMove({ targetCol, targetRow }) {
+  isValidMove(targetCol, targetRow) {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
 
@@ -67,25 +67,24 @@ class Bishop extends Piece {
 }
 
 class Knight extends Piece {
-  isValidMove({ targetCol, targetRow }) {
+  isValidMove(targetCol, targetRow) {
     const colDiff = Math.abs(targetCol - this.col);
     const rowDiff = Math.abs(targetRow - this.row);
-    
+
     return (rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2);
   }
 }
 
 class Pawn extends Piece {
-  isValidMove({ targetCol, targetRow, isPiece, isSameColor }) {
-    const direction = this.color === "white" ? -1 : 1; // 백은 위로, 흑은 아래로
+  isValidMove(targetCol, targetRow, board) {
+    const direction = this.color === "white" ? -1 : 1;
     const startRow = this.color === "white" ? 6 : 1;
 
       // 처음 두 칸 이동 가능
       if (
         this.row === startRow &&
         targetRow === this.row + 2 * direction &&
-        targetCol === this.col &&
-        !isPiece
+        targetCol === this.col
       ) {
         return true;
       }
@@ -94,7 +93,6 @@ class Pawn extends Piece {
       if (
         targetCol === this.col &&
         targetRow === this.row + direction
-        && !isPiece
       ) {
         return true;
       }
@@ -103,7 +101,6 @@ class Pawn extends Piece {
       if (
         targetRow === this.row + direction &&
         Math.abs(targetCol - this.col) === 1
-        && isPiece && !isSameColor
       ) {
         return true;
       }
