@@ -16,7 +16,10 @@ const initialSetup = () => {
   }
 }
 
+const getPieceAt = ({row, col}) =>  board[row][col];
+
 export {
   board,
-  initialSetup
+  initialSetup,
+  getPieceAt
 }
