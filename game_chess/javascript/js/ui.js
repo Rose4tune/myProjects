@@ -12,13 +12,13 @@ const removeSelected = () => {
   selectedSquare = null;
 };
 
-const movePiece = (row, col, board) => {
+const moveSelectedPiece = (row, col, board) => {
   const targetPiece = getPieceAt({ row, col });
 
   if (targetPiece === selectedPiece) {
     removeSelected();
   }
-}
+};
 
 const selectPiece = (row, col, board) => {
   const piece = getPieceAt({ row, col });
@@ -36,7 +36,7 @@ const handleSquareClick = (event, board) => {
   const col = parseInt(event.target.dataset.col);
 
   if (selectedPiece) {
-    movePiece(row, col, board);
+    moveSelectedPiece(row, col, board);
   } else {
     selectPiece(row, col, board);
   }
