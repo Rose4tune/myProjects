@@ -31,7 +31,7 @@ const removeSelected = () => {
   clearHighlights();
 };
 
-const moveSelectedPiece = ({ row, col }, board, target) => {
+const moveSelectedPiece = ({ row, col, img }, board, target) => {
   const targetPiece = getPieceAt({ row, col });
   const isValidMove = selectedPiece.isValidMove(row, col, board);
 
@@ -42,6 +42,10 @@ const moveSelectedPiece = ({ row, col }, board, target) => {
     target.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
     removeSelected();
+
+  } else if (!isValidMove && targetPiece) {
+    removeSelected();
+    selectPiece({ row, col, img }, board);
 
   } else {
     removeSelected();
@@ -66,7 +70,7 @@ const handleSquareClick = (event, board) => {
   const img = event.target.firstChild;
 
   if (selectedPiece) {
-    moveSelectedPiece({ row, col }, board, event.target);
+    moveSelectedPiece({ row, col, img }, board, event.target);
   } else {
     selectPiece({ row, col, img }, board);
   }
