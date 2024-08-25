@@ -15,11 +15,10 @@ class King extends Piece {
     const rowDiff = Math.abs(targetRow - this.row);
     const colDiff = Math.abs(targetCol - this.col);
 
-    if(colDiff <= 1 && rowDiff <= 1) {
-      return true
-    }
-
-    return false
+    return (
+      !(colDiff === 0 && rowDiff === 0) &&
+      colDiff <= 1 && rowDiff <= 1
+    );
   }
 }
 
@@ -28,12 +27,10 @@ class Queen extends Piece {
     const rowDiff = Math.abs(targetRow - this.row);
     const colDiff = Math.abs(targetCol - this.col);
 
-    if (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff) {
-      return true;
-    }
-
-
-    return false
+    return (
+      !(colDiff == 0 && rowDiff == 0) &&
+      (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff)
+    );
   }
 }
 
@@ -42,11 +39,10 @@ class Rook extends Piece {
     const rowDiff = Math.abs(targetRow - this.row);
     const colDiff = Math.abs(targetCol - this.col);
 
-    if (colDiff === 0 || rowDiff === 0) {
-      return true;
-    }
-
-    return false
+    return (
+      !(colDiff == 0 && rowDiff == 0) &&
+      (colDiff === 0 || rowDiff === 0)
+    );
   }
 }
 
@@ -55,11 +51,7 @@ class Bishop extends Piece {
     const rowDiff = Math.abs(targetRow - this.row);
     const colDiff = Math.abs(targetCol - this.col);
 
-    if (colDiff === rowDiff) {
-      return true;
-    }
-
-    return false
+    return !(colDiff == 0 && rowDiff == 0) && colDiff === rowDiff
   }
 }
 
