@@ -9,17 +9,25 @@ const initialSetup = () => {
   ];
 
   for (let i = 0; i < 8; i++) {
-    board[0][i] = new pieceSetup[0][i]("black", i, 0);
-    board[1][i] = new pieceSetup[1][i]("black", i, 1);
-    board[6][i] = new pieceSetup[1][i]("white", i, 6);
-    board[7][i] = new pieceSetup[0][i]("white", i, 7);
+    board[0][i] = new pieceSetup[0][i]("black", 0, i);
+    board[1][i] = new pieceSetup[1][i]("black", 1, i);
+    board[6][i] = new pieceSetup[1][i]("white", 6, i);
+    board[7][i] = new pieceSetup[0][i]("white", 7, i);
   }
 }
 
-const getPieceAt = ({row, col}) =>  board[row][col];
+const getPieceAt = ({ row, col }) => board[row][col];
+
+const movePiece = ({row:fromRow, col:fromCol}, toRow, toCol) => {
+  board[toRow][toCol] = board[fromRow][fromCol];
+  board[fromRow][fromCol] = null;
+  board[toRow][toCol].row = toRow;
+  board[toRow][toCol].col = toCol;
+};
 
 export {
   board,
   initialSetup,
-  getPieceAt
+  getPieceAt,
+  movePiece
 }

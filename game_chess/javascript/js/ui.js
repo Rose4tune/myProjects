@@ -1,4 +1,4 @@
-import { getPieceAt } from "./board.js";
+import { getPieceAt, movePiece } from "./board.js";
 
 let selectedPiece = null;
 let selectedSquare = null;
@@ -12,19 +12,24 @@ const removeSelected = () => {
   selectedSquare = null;
 };
 
-const moveSelectedPiece = (row, col, board) => {
+const moveSelectedPiece = (row, col, board, targetSquare) => {
   const targetPiece = getPieceAt({ row, col });
 
   if (targetPiece === selectedPiece) {
     removeSelected();
+
+  } else {
+    targetSquare.prepend(selectedSquare.img);
+    movePiece(selectedPiece, row, col);
+    removeSelected();
   }
 };
 
-const selectPiece = (row, col, board) => {
+const selectPiece = (row, col, img) => {
   const piece = getPieceAt({ row, col });
   if (piece) {
     selectedPiece = piece;
-    selectedSquare = { col, row };
+    selectedSquare = { row, col, img };
     document
       .querySelector(`.square[data-col='${col}'][data-row='${row}']`)
       .classList.add("selected");
@@ -34,11 +39,12 @@ const selectPiece = (row, col, board) => {
 const handleSquareClick = (event, board) => {
   const row = parseInt(event.target.dataset.row);
   const col = parseInt(event.target.dataset.col);
+  const img = event.target.firstChild;
 
   if (selectedPiece) {
-    moveSelectedPiece(row, col, board);
+    moveSelectedPiece(row, col, board, event.target);
   } else {
-    selectPiece(row, col, board);
+    selectPiece(row, col, img);
   }
 }
 
