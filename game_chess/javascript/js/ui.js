@@ -18,10 +18,14 @@ const moveSelectedPiece = (row, col, board, targetSquare) => {
   if (targetPiece === selectedPiece) {
     removeSelected();
 
-  } else {
+  } else if (selectedPiece.isValidMove(row, col, board)) {
     targetSquare.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
     removeSelected();
+
+  } else {
+    removeSelected();
+
   }
 };
 
