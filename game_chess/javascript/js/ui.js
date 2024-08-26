@@ -39,7 +39,7 @@ const moveSelectedPiece = ({ row, col, img }, board, target) => {
     removeSelected();
 
   } else if (isValidMove) {
-    target.firstChild.remove();
+    if (target.firstChild.localName === "img") target.firstChild.remove();
     target.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
     removeSelected();
