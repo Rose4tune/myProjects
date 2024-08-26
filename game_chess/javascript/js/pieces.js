@@ -11,7 +11,7 @@ class Piece {
 
   isSameColor(targetRow, targetCol, board) {
     const color = board[targetRow][targetCol]?.color;
-    return board[this.row][this.col].color !== color
+    return board[this.row][this.col].color === color
   }
 }
 
@@ -23,7 +23,7 @@ class King extends Piece {
     return (
       !(colDiff === 0 && rowDiff === 0) &&
       colDiff <= 1 && rowDiff <= 1 &&
-      this.isSameColor(targetRow, targetCol, board)
+      !this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -36,21 +36,44 @@ class Queen extends Piece {
     return (
       !(colDiff == 0 && rowDiff == 0) &&
       (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff) &&
-      this.isSameColor(targetRow, targetCol, board)
+      !this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
 
 class Rook extends Piece {
   isValidMove(targetRow, targetCol, board) {
-    const rowDiff = Math.abs(targetRow - this.row);
-    const colDiff = Math.abs(targetCol - this.col);
+    const possibleMoves = [];
 
-    return (
-      !(colDiff == 0 && rowDiff == 0) &&
-      (colDiff === 0 || rowDiff === 0) &&
-      this.isSameColor(targetRow, targetCol, board)
+    for (let row = 0; row < 8; row++) {
+      if (row !== this.row) possibleMoves.push({ row, col: this.col });
+    }
+
+    for (let col = 0; col < 8; col++) {
+      if (col !== this.col) possibleMoves.push({ row: this.row, col });
+    }
+
+    const move = possibleMoves.find(
+      (move) =>
+        move.row === targetRow &&
+        move.col === targetCol &&
+        !this.isSameColor(targetRow, targetCol, board)
     );
+    if (!move) return false;
+
+    if (move.row === this.row) {
+      const step = move.col > this.col ? 1 : -1;
+      for (let col = this.col + step; col !== targetCol; col += step) {
+        if (board[this.row][col]) return false;
+      }
+    } else {
+      const step = move.row > this.row ? 1 : -1;
+      for (let row = this.row + step; row !== targetRow; row += step) {
+        if (board[row][this.col]) return false;
+      }
+    }
+
+    return true;
   }
 }
 
@@ -62,7 +85,7 @@ class Bishop extends Piece {
     return (
       !(colDiff == 0 && rowDiff == 0) &&
       colDiff === rowDiff &&
-      this.isSameColor(targetRow, targetCol, board)
+      !this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -74,7 +97,7 @@ class Knight extends Piece {
 
     return (
       ((colDiff === 1 && rowDiff === 2) || (colDiff === 2 && rowDiff === 1)) &&
-      this.isSameColor(targetRow, targetCol, board)
+      !this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -106,7 +129,7 @@ class Pawn extends Piece {
       Math.abs(this.col - targetCol) === 1 &&
       targetRow === this.row + direction &&
       target &&
-      this.isSameColor(targetRow, targetCol, board)
+      !this.isSameColor(targetRow, targetCol, board)
     ) {
       return true;
     }
