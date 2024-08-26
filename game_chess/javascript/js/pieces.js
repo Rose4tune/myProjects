@@ -92,12 +92,11 @@ class Pawn extends Piece {
     ) {
       return true;
     }
-
+    
     if (
       this.col === targetCol &&
       this.row === startRow &&
       targetRow === this.row + 2 * direction &&
-      !board[this.row + direction][targetCol] &&
       !target
     ) {
       return true;
@@ -106,7 +105,8 @@ class Pawn extends Piece {
     if (
       Math.abs(this.col - targetCol) === 1 &&
       targetRow === this.row + direction &&
-      target
+      target &&
+      this.isSameColor(targetRow, targetCol, board)
     ) {
       return true;
     }
