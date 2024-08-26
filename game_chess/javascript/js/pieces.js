@@ -8,6 +8,11 @@ class Piece {
   isValidMove(targetRow, targetCol, board) {
     throw new Error("This method should be implemented by subclasses");
   }
+
+  isSameColor(targetRow, targetCol, board) {
+    const color = board[targetRow][targetCol]?.color;
+    return board[this.row][this.col].color !== color
+  }
 }
 
 class King extends Piece {
@@ -17,7 +22,8 @@ class King extends Piece {
 
     return (
       !(colDiff === 0 && rowDiff === 0) &&
-      colDiff <= 1 && rowDiff <= 1
+      colDiff <= 1 && rowDiff <= 1 &&
+      this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -29,7 +35,8 @@ class Queen extends Piece {
 
     return (
       !(colDiff == 0 && rowDiff == 0) &&
-      (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff)
+      (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff) &&
+      this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -41,7 +48,8 @@ class Rook extends Piece {
 
     return (
       !(colDiff == 0 && rowDiff == 0) &&
-      (colDiff === 0 || rowDiff === 0)
+      (colDiff === 0 || rowDiff === 0) &&
+      this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
@@ -51,7 +59,11 @@ class Bishop extends Piece {
     const rowDiff = Math.abs(targetRow - this.row);
     const colDiff = Math.abs(targetCol - this.col);
 
-    return !(colDiff == 0 && rowDiff == 0) && colDiff === rowDiff
+    return (
+      !(colDiff == 0 && rowDiff == 0) &&
+      colDiff === rowDiff &&
+      this.isSameColor(targetRow, targetCol, board)
+    );
   }
 }
 
@@ -61,8 +73,8 @@ class Knight extends Piece {
     const colDiff = Math.abs(targetCol - this.col);
 
     return (
-      (colDiff === 1 && rowDiff === 2) ||
-      (colDiff === 2 && rowDiff === 1)
+      ((colDiff === 1 && rowDiff === 2) || (colDiff === 2 && rowDiff === 1)) &&
+      this.isSameColor(targetRow, targetCol, board)
     );
   }
 }
