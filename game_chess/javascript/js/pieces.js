@@ -52,6 +52,7 @@ class Rook extends Piece {
     for (let col = 0; col < 8; col++) {
       if (col !== this.col) possibleMoves.push({ row: this.row, col });
     }
+      console.log(possibleMoves);
 
     const move = possibleMoves.find(
       (move) =>
@@ -79,14 +80,46 @@ class Rook extends Piece {
 
 class Bishop extends Piece {
   isValidMove(targetRow, targetCol, board) {
-    const rowDiff = Math.abs(targetRow - this.row);
-    const colDiff = Math.abs(targetCol - this.col);
+    const possibleMoves = [];
 
-    return (
-      !(colDiff == 0 && rowDiff == 0) &&
-      colDiff === rowDiff &&
-      !this.isSameColor(targetRow, targetCol, board)
+    const colDiff = targetCol - this.col;
+    const rowDiff = targetRow - this.row;
+
+    if (Math.abs(colDiff) !== Math.abs(rowDiff)) return false;
+
+    const colStep = colDiff > 0 ? 1 : -1;
+    const rowStep = rowDiff > 0 ? 1 : -1;
+
+    let col = this.col + colStep;
+    let row = this.row + rowStep;
+
+    while (col >= 0 && col < 8 && row >= 0 && row < 8) {
+      possibleMoves.push({ row, col });
+      if (col === targetCol && row === targetRow) break;
+      col += colStep;
+      row += rowStep;
+    }
+
+    console.log(possibleMoves);
+
+    const move = possibleMoves.find(
+      (move) =>
+        move.col === targetCol &&
+        move.row === targetRow &&
+        !this.isSameColor(targetRow, targetCol, board)
     );
+    if (!move) return false;
+
+    col = this.col + colStep;
+    row = this.row + rowStep;
+
+    while (col !== targetCol && row !== targetRow) {
+      if (board[row][col]) return false;
+      col += colStep;
+      row += rowStep;
+    }
+
+    return true;
   }
 }
 
