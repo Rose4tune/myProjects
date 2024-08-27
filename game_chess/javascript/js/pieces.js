@@ -3,6 +3,7 @@ class Piece {
     this.color = color;
     this.row = row;
     this.col = col;
+    this.possibleMoves = [];
   }
 
   isValidMove(targetRow, targetCol, board) {
@@ -11,8 +12,40 @@ class Piece {
 
   isSameColor(targetRow, targetCol, board) {
     const color = board[targetRow][targetCol]?.color;
-    return board[this.row][this.col].color === color
+    return board[this.row][this.col].color === color;
   }
+
+  isPathClear(targetCol, targetRow, board) {
+    const colDiff = targetCol - this.col;
+    const rowDiff = targetRow - this.row;
+    const colStep = colDiff !== 0 ? colDiff / Math.abs(colDiff) : 0;
+    const rowStep = rowDiff !== 0 ? rowDiff / Math.abs(rowDiff) : 0;
+
+    let col = this.col + colStep;
+    let row = this.row + rowStep;
+
+    while (col !== targetCol || row !== targetRow) {
+      if (board[row][col]) {
+        return false;
+      }
+      col += colStep;
+      row += rowStep;
+    }
+
+    if (!this.isSameColor(targetRow, targetCol, board)) return true;
+  }
+
+  findPossibleMoves = (targetRow, targetCol, board) => {
+    const move = this.possibleMoves.find(
+      (move) =>
+        move.row === targetRow &&
+        move.col === targetCol &&
+        !this.isSameColor(targetRow, targetCol, board)
+    );
+    this.possibleMoves = [];
+
+    return move;
+  };
 }
 
 class King extends Piece {
@@ -34,92 +67,33 @@ class Queen extends Piece {
     const colDiff = Math.abs(targetCol - this.col);
 
     return (
-      !(colDiff == 0 && rowDiff == 0) &&
       (colDiff === 0 || rowDiff === 0 || colDiff === rowDiff) &&
-      !this.isSameColor(targetRow, targetCol, board)
+      this.isPathClear(targetCol, targetRow, board)
     );
   }
 }
 
 class Rook extends Piece {
   isValidMove(targetRow, targetCol, board) {
-    const possibleMoves = [];
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
 
-    for (let row = 0; row < 8; row++) {
-      if (row !== this.row) possibleMoves.push({ row, col: this.col });
-    }
-
-    for (let col = 0; col < 8; col++) {
-      if (col !== this.col) possibleMoves.push({ row: this.row, col });
-    }
-      console.log(possibleMoves);
-
-    const move = possibleMoves.find(
-      (move) =>
-        move.row === targetRow &&
-        move.col === targetCol &&
-        !this.isSameColor(targetRow, targetCol, board)
+    return (
+      (colDiff === 0 || rowDiff === 0) &&
+      this.isPathClear(targetCol, targetRow, board)
     );
-    if (!move) return false;
-
-    if (move.row === this.row) {
-      const step = move.col > this.col ? 1 : -1;
-      for (let col = this.col + step; col !== targetCol; col += step) {
-        if (board[this.row][col]) return false;
-      }
-    } else {
-      const step = move.row > this.row ? 1 : -1;
-      for (let row = this.row + step; row !== targetRow; row += step) {
-        if (board[row][this.col]) return false;
-      }
-    }
-
-    return true;
   }
 }
 
 class Bishop extends Piece {
   isValidMove(targetRow, targetCol, board) {
-    const possibleMoves = [];
+    const colDiff = Math.abs(targetCol - this.col);
+    const rowDiff = Math.abs(targetRow - this.row);
 
-    const colDiff = targetCol - this.col;
-    const rowDiff = targetRow - this.row;
-
-    if (Math.abs(colDiff) !== Math.abs(rowDiff)) return false;
-
-    const colStep = colDiff > 0 ? 1 : -1;
-    const rowStep = rowDiff > 0 ? 1 : -1;
-
-    let col = this.col + colStep;
-    let row = this.row + rowStep;
-
-    while (col >= 0 && col < 8 && row >= 0 && row < 8) {
-      possibleMoves.push({ row, col });
-      if (col === targetCol && row === targetRow) break;
-      col += colStep;
-      row += rowStep;
-    }
-
-    console.log(possibleMoves);
-
-    const move = possibleMoves.find(
-      (move) =>
-        move.col === targetCol &&
-        move.row === targetRow &&
-        !this.isSameColor(targetRow, targetCol, board)
+    return (
+      colDiff === rowDiff &&
+      this.isPathClear(targetCol, targetRow, board)
     );
-    if (!move) return false;
-
-    col = this.col + colStep;
-    row = this.row + rowStep;
-
-    while (col !== targetCol && row !== targetRow) {
-      if (board[row][col]) return false;
-      col += colStep;
-      row += rowStep;
-    }
-
-    return true;
   }
 }
 
