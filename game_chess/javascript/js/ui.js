@@ -1,4 +1,5 @@
 import { getPieceAt, movePiece } from "./board.js";
+import { isCheck, isCheckmate } from "./rules.js";
 
 let selectedPiece = null;
 let selectedSquare = null;
@@ -50,6 +51,14 @@ const moveSelectedPiece = ({ row, col, img }, board, target) => {
 
   } else {
     removeSelected();
+  }
+
+  if (isCheckmate(targetPiece.color === "white" ? "black" : "white", board)) {
+    alert("Checkmate!");
+  } else if (
+    isCheck(targetPiece.color === "white" ? "black" : "white", board)
+  ) {
+    alert("Check!");
   }
 };
 
