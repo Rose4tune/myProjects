@@ -8,8 +8,9 @@ const highlightMoves = (piece, board) => {
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < board[row].length; col++) {
       if (piece.isValidMove(row, col, board)) {
-        document.querySelector(`.square[data-col='${col}'][data-row='${row}']`)
-          .classList.add('highlight');
+        document
+          .querySelector(`.square[data-row='${row}'][data-col='${col}']`)
+          .classList.add("highlight");
       }
     }
   }
@@ -25,7 +26,7 @@ const clearHighlights = () => {
 const removeSelected = () => {
   const { row, col } = selectedSquare;
   document
-    .querySelector(`.square[data-col='${col}'][data-row='${row}']`)
+    .querySelector(`.square[data-row='${row}'][data-col='${col}']`)
     .classList.remove("selected");
   selectedPiece = null;
   selectedSquare = null;

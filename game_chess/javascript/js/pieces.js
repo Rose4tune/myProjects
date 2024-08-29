@@ -113,7 +113,7 @@ class Pawn extends Piece {
   isValidMove(targetRow, targetCol, board) {
     const direction = this.color === "white" ? -1 : 1;
     const startRow = this.color === "white" ? 6 : 1;
-    const target = board[targetRow][targetCol]
+    const target = board[targetRow][targetCol];
 
     if (
       this.col === targetCol &&
