@@ -43,22 +43,20 @@ const moveSelectedPiece = ({ row, col, img }, board, target) => {
     if (target.firstChild.localName === "img") target.firstChild.remove();
     target.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
-    removeSelected();
 
+    if (isCheckmate(selectedPiece.color, board)) {
+      alert("Checkmate!");
+    } else if (isCheck(selectedPiece.color, board)) {
+      alert("Check!!");
+    }
+
+    removeSelected();
   } else if (!isValidMove && targetPiece) {
     removeSelected();
     selectPiece({ row, col, img }, board);
 
   } else {
     removeSelected();
-  }
-
-  if (isCheckmate(targetPiece.color === "white" ? "black" : "white", board)) {
-    alert("Checkmate!");
-  } else if (
-    isCheck(targetPiece.color === "white" ? "black" : "white", board)
-  ) {
-    alert("Check!");
   }
 };
 
