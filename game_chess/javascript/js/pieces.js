@@ -10,6 +10,38 @@ class Piece {
     throw new Error("This method should be implemented by subclasses");
   }
 
+  // // 가상 이동 후 체크 상태 확인을 위한 메서드
+  // simulateMove(board, fromCol, fromRow, toCol, toRow) {
+  //   const originalPiece = board[toRow][toCol];
+  //   movePiece(fromCol, fromRow, toCol, toRow); // 가상으로 이동
+
+  //   const kingInCheck = isKingInCheck(this.color, board);
+
+  //   // 원래 위치로 복원
+  //   board[fromRow][fromCol] = this;
+  //   board[toRow][toCol] = originalPiece;
+
+  //   return kingInCheck;
+  // }
+
+  // // 이동 가능한 위치를 반환하는 메서드 (변경된 부분)
+  // getValidMoves(board) {
+  //   const validMoves = [];
+
+  //   for (let row = 0; row < 8; row++) {
+  //     for (let col = 0; col < 8; col++) {
+  //       if (
+  //         this.isValidMove(col, row, board) &&
+  //         !this.simulateMove(board, this.col, this.row, col, row)
+  //       ) {
+  //         validMoves.push({ col, row });
+  //       }
+  //     }
+  //   }
+
+  //   return validMoves;
+  // }
+
   isSameColor(targetRow, targetCol, board) {
     const color = board[targetRow][targetCol]?.color;
     return board[this.row][this.col].color === color;
