@@ -1,3 +1,6 @@
+import { movePiece } from "./board.js";
+import { isCheck } from "./rules.js";
+
 class Piece {
   constructor(color, row, col) {
     this.color = color;
@@ -11,36 +14,44 @@ class Piece {
   }
 
   // // 가상 이동 후 체크 상태 확인을 위한 메서드
-  // simulateMove(board, fromCol, fromRow, toCol, toRow) {
-  //   const originalPiece = board[toRow][toCol];
-  //   movePiece(fromCol, fromRow, toCol, toRow); // 가상으로 이동
+  simulateMove(fromRow, fromCol, toRow, toCol, board) {
+    // console.log(fromRow, fromCol, toRow, toCol);
+    const originalPiece = board[toRow][toCol];
 
-  //   const kingInCheck = isKingInCheck(this.color, board);
+    movePiece({row:fromRow, col:fromCol}, toRow, toCol); // 가상으로 이동
 
-  //   // 원래 위치로 복원
-  //   board[fromRow][fromCol] = this;
-  //   board[toRow][toCol] = originalPiece;
+    const kingInCheck = isCheck(this.color === 'white' ? 'black' : 'white', board);
+    // console.log('is check:', kingInCheck);
+    
+    // // 원래 위치로 복원
+    this.row = fromRow;
+    this.col = fromCol;
+    board[fromRow][fromCol] = this;
+    board[toRow][toCol] = originalPiece;
 
-  //   return kingInCheck;
-  // }
+    // console.log('board: ', board)
+
+    return kingInCheck;
+  }
 
   // // 이동 가능한 위치를 반환하는 메서드 (변경된 부분)
-  // getValidMoves(board) {
-  //   const validMoves = [];
+  getValidMoves(board) {
+    const validMoves = [];
 
-  //   for (let row = 0; row < 8; row++) {
-  //     for (let col = 0; col < 8; col++) {
-  //       if (
-  //         this.isValidMove(col, row, board) &&
-  //         !this.simulateMove(board, this.col, this.row, col, row)
-  //       ) {
-  //         validMoves.push({ col, row });
-  //       }
-  //     }
-  //   }
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        if (
+          this.isValidMove(row, col, board) &&
+          !this.simulateMove(this.row, this.col, row, col, board)
+        ) {
+          console.log(row, col)
+          validMoves.push({ col, row });
+        }
+      }
+    }
 
-  //   return validMoves;
-  // }
+    return validMoves;
+  }
 
   isSameColor(targetRow, targetCol, board) {
     const color = board[targetRow][targetCol]?.color;
