@@ -5,16 +5,13 @@ let selectedPiece = null;
 let selectedSquare = null;
 
 const highlightMoves = (piece, board) => {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[row].length; col++) {
-      const moves = piece.getValidMoves(board);
-      moves.forEach(move => {
-        document
-          .querySelector(`.square[data-row='${move.row}'][data-col='${move.col}']`)
-          .classList.add("highlight");
-      });
-    }
-  }
+  const moves = piece.getValidMoves(board);
+  
+  moves.forEach(move => {
+    document
+      .querySelector(`.square[data-row='${move.row}'][data-col='${move.col}']`)
+      .classList.add("highlight");
+  });
 }
 
 const clearHighlights = () => {

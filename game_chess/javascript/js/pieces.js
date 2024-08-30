@@ -13,28 +13,19 @@ class Piece {
     throw new Error("This method should be implemented by subclasses");
   }
 
-  // // 가상 이동 후 체크 상태 확인을 위한 메서드
   simulateMove(fromRow, fromCol, toRow, toCol, board) {
-    // console.log(fromRow, fromCol, toRow, toCol);
     const originalPiece = board[toRow][toCol];
-
-    movePiece({row:fromRow, col:fromCol}, toRow, toCol); // 가상으로 이동
-
+    movePiece({row:fromRow, col:fromCol}, toRow, toCol);
     const kingInCheck = isCheck(this.color === 'white' ? 'black' : 'white', board);
-    // console.log('is check:', kingInCheck);
-    
-    // // 원래 위치로 복원
+
     this.row = fromRow;
     this.col = fromCol;
     board[fromRow][fromCol] = this;
     board[toRow][toCol] = originalPiece;
 
-    // console.log('board: ', board)
-
     return kingInCheck;
   }
 
-  // // 이동 가능한 위치를 반환하는 메서드 (변경된 부분)
   getValidMoves(board) {
     const validMoves = [];
 
@@ -44,7 +35,6 @@ class Piece {
           this.isValidMove(row, col, board) &&
           !this.simulateMove(this.row, this.col, row, col, board)
         ) {
-          console.log(row, col)
           validMoves.push({ col, row });
         }
       }
