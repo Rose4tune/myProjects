@@ -43,20 +43,22 @@ const isCheckmate = (selectedColor, board) => {
     for (let col = 0; col < 8; col++) {
       const piece = board[row][col];
       
-      if (piece && piece.color === kingColor) {
+      if (piece?.color === kingColor) {
         for (let targetRow = 0; targetRow < 8; targetRow++) {
           for (let targetCol = 0; targetCol < 8; targetCol++) {
-            const originalPiece = board[targetRow][targetCol];
 
             if (piece.isValidMove(targetRow, targetCol, board)) {
-              movePiece({row, col}, targetRow, targetCol);
-              const checkAfterMove = isCheck(selectedColor, board);
-              board[row][col] = piece;
-              board[targetRow][targetCol] = originalPiece;
+              const originalPiece = board[targetRow][targetCol];
+              movePiece({ row, col }, targetRow, targetCol);
+              
+              const checkAfterMove = isCheck(selectedColor === "white" ? "black" : "white", board);
+
               piece.row = row;
               piece.col = col;
+              board[row][col] = piece;
+              board[targetRow][targetCol] = originalPiece;
 
-              if (!checkAfterMove) return true;
+              return !checkAfterMove;
             }
           }
         }

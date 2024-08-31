@@ -34,11 +34,12 @@ const removeSelected = () => {
 const moveSelectedPiece = ({ row, col, img }, board, target) => {
   const targetPiece = getPieceAt({ row, col });
   const isValidMove = selectedPiece.isValidMove(row, col, board);
+  const getValidMoves = selectedPiece.getValidMoves(board).length !== 0;
 
   if (targetPiece === selectedPiece) {
     removeSelected();
 
-  } else if (isValidMove) {
+  } else if (isValidMove && getValidMoves) {
     if (target.firstChild.localName === "img") target.firstChild.remove();
     target.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
@@ -50,10 +51,11 @@ const moveSelectedPiece = ({ row, col, img }, board, target) => {
     }
 
     removeSelected();
+
   } else if (!isValidMove && targetPiece) {
     removeSelected();
     selectPiece({ row, col, img }, board);
-
+    
   } else {
     removeSelected();
   }
