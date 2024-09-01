@@ -44,10 +44,10 @@ const moveSelectedPiece = ({ row, col, img }, board, target) => {
     target.prepend(selectedSquare.img);
     movePiece(selectedPiece, row, col);
 
-    if (isCheckmate(selectedPiece.color, board)) {
-      alert("Checkmate!");
-    } else if (isCheck(selectedPiece.color, board)) {
-      alert("Check!!");
+    if (isCheck(selectedPiece.color, board)) {
+      alert("Check!");
+    } else if (isCheckmate(selectedPiece.color, board)) {
+      alert("Checkmate!!");
     }
 
     removeSelected();

@@ -26,6 +26,7 @@ const isCheck = (selectedColor, board) => {
         piece.color === selectedColor &&
         piece.isValidMove(kingPosition.row, kingPosition.col, board)
       ) {
+        console.log(piece.isValidMove(kingPosition.row, kingPosition.col, board));
         return true;
       }
     }
